@@ -244,18 +244,17 @@ class GlobalTrashCan:
         file_has_been_trashed = False
         for trash_dir in candidates.trash_dirs:
             if self._is_trash_dir_secure(trash_dir):
-                if self._file_could_be_trashed_in(file, trash_dir.path):
-                    try:
-                        trashed_file = trash_dir.trash(file)
-                        self.reporter.file_has_been_trashed_in_as(
-                            file,
-                            trashed_file['trash_directory'],
-                            trashed_file['where_file_was_stored'])
-                        file_has_been_trashed = True
+                try:
+                    trashed_file = trash_dir.trash(file)
+                    self.reporter.file_has_been_trashed_in_as(
+                        file,
+                        trashed_file['trash_directory'],
+                        trashed_file['where_file_was_stored'])
+                    file_has_been_trashed = True
 
-                    except (IOError, OSError), error:
-                        self.reporter.unable_to_trash_file_in_because(
-                                file, trash_dir.path, str(error))
+                except (IOError, OSError), error:
+                    self.reporter.unable_to_trash_file_in_because(
+                            file, trash_dir.path, str(error))
 
             if file_has_been_trashed: break
 
